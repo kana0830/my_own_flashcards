@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_own_flashcards/parts/button_with_icon.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -20,9 +21,18 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 30.0,
               color: Colors.white,
             ),
-            //TODO 確認テストをするボタン
+            ButtonWithIcon(
+              onPressed: () => print("かくにんテスト"), //TODO
+              icon: Icon(Icons.play_arrow),
+              label: "かくにんテストをする",
+              color: Colors.brown,
+            ),
             //TODO ラジオボタン
-            //TODO 単語一覧を見るボタン
+            ButtonWithIcon(
+                onPressed: () => print("単語一覧"),
+                icon: Icon(Icons.list),
+                label: "単語一覧を見る",
+                color: Colors.grey),
             Text(
               "powered by Kana",
               style: TextStyle(fontFamily: "Mont"),

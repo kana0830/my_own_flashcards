@@ -18,7 +18,10 @@ class _HomeScreenState extends State<HomeScreen> {
             //TODO 確認テストをするボタン
             //TODO ラジオボタン
             //TODO 単語一覧を見るボタン
-            Text("powered by Kana")
+            Text(
+              "powered by Kana",
+              style: TextStyle(fontFamily: "Mont"),
+            )
           ],
         ),
       ),
@@ -34,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Text(
           "My Own Flashcard",
-          style: TextStyle(fontSize: 24.0),
+          style: TextStyle(fontSize: 24.0, fontFamily: "Mont"),
         ),
       ],
     );

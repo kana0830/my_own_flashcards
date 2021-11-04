@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_own_flashcards/parts/button_with_icon.dart';
+import 'package:my_own_flashcards/screens/test_screen.dart';
+import 'package:my_own_flashcards/screens/word_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -24,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.white,
             ),
             ButtonWithIcon(
-              onPressed: () => print("かくにんテスト"), //TODO
+              onPressed: () => _startTestScreen(context),
               icon: Icon(Icons.play_arrow),
               label: "かくにんテストをする",
               color: Colors.brown,
@@ -37,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 20.0,
             ),
             ButtonWithIcon(
-                onPressed: () => print("単語一覧"),
+                onPressed: () => _startWordListScreen(context),
                 icon: Icon(Icons.list),
                 label: "単語一覧を見る",
                 color: Colors.grey),
@@ -102,5 +104,19 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isIncludedMemorizedWords = value;
     });
+  }
+
+  _startWordListScreen(BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => WordListScreen()));
+  }
+
+  _startTestScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TestScreen(
+                  isIncludedMemorizedWords: isIncludedMemorizedWords,
+                )));
   }
 }

@@ -14,7 +14,12 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(child: Image.asset("assets/images/image_title.png")),
             _titleText(),
-            //TODO 横線
+            Divider(
+              indent: 8.0,
+              endIndent: 8.0,
+              height: 30.0,
+              color: Colors.white,
+            ),
             //TODO 確認テストをするボタン
             //TODO ラジオボタン
             //TODO 単語一覧を見るボタン

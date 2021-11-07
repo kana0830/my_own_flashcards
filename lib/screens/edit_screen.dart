@@ -1,5 +1,10 @@
+import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:my_own_flashcards/db/database.dart';
+import 'package:my_own_flashcards/main.dart';
 import 'package:my_own_flashcards/screens/word_list_screen.dart';
+import 'package:sqlite3/src/api/exception.dart';
 
 class EditScreen extends StatefulWidget {
   @override
@@ -19,6 +24,13 @@ class _EditScreenState extends State<EditScreen> {
           appBar: AppBar(
             title: Text("新しい単語の登録"),
             centerTitle: true,
+            actions: [
+              IconButton(
+                onPressed: () => _insertWord(),
+                icon: Icon(Icons.done),
+                tooltip: "登録",
+              )
+            ],
           ),
           body: SingleChildScrollView(
             child: Column(
@@ -88,5 +100,32 @@ class _EditScreenState extends State<EditScreen> {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => WordListScreen()));
     return Future.value(false);
+  }
+
+  _insertWord() async {
+    if (questionController.text == "" || answerController.text == "") {
+      Fluttertoast.showToast(
+          msg: "問題と答えの両方を入力しないと登録できません",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM);
+      return;
+    }
+    var word = Word(
+        strQuestion: questionController.text, strAnswer: answerController.text);
+    try {
+      await database.addWord(word);
+    } on SqliteException catch (e) {
+      Fluttertoast.showToast(
+          msg: "この問題はすでに登録されていますので登録できません",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM);
+    }
+
+    questionController.clear();
+    answerController.clear();
+    Fluttertoast.showToast(
+        msg: "登録完了しました",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM);
   }
 }

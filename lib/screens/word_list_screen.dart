@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_own_flashcards/db/database.dart';
+import 'package:my_own_flashcards/main.dart';
 
 import 'edit_screen.dart';
 
@@ -8,6 +10,14 @@ class WordListScreen extends StatefulWidget {
 }
 
 class _WordListScreenState extends State<WordListScreen> {
+  List<Word> _wordList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getAllWords();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,5 +37,9 @@ class _WordListScreenState extends State<WordListScreen> {
   _addNewWord() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => EditScreen()));
+  }
+
+  void _getAllWords() async {
+    _wordList = await database.allWords;
   }
 }

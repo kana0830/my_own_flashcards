@@ -25,7 +25,10 @@ class _WordListScreenState extends State<WordListScreen> {
         title: Text("単語一覧"),
         centerTitle: true,
       ),
-      //TODO body
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: _wordListWidget(),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _addNewWord(),
         child: Icon(Icons.add),
@@ -41,5 +44,27 @@ class _WordListScreenState extends State<WordListScreen> {
 
   void _getAllWords() async {
     _wordList = await database.allWords;
+    setState(() {});
+  }
+
+  Widget _wordListWidget() {
+    return ListView.builder(
+      itemBuilder: (context, int position) => _wordItem(position),
+      itemCount: _wordList.length,
+    );
+  }
+
+  _wordItem(int position) {
+    return Card(
+      elevation: 5.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      child: ListTile(
+        title: Text("${_wordList[position].strQuestion}"),
+        subtitle: Text(
+          "${_wordList[position].strAnswer}",
+          style: TextStyle(fontFamily: "Mont"),
+        ),
+      ),
+    );
   }
 }

@@ -52,7 +52,7 @@ class _EditScreenState extends State<EditScreen> {
           centerTitle: true,
           actions: [
             IconButton(
-              onPressed: () => _insertWord(),
+              onPressed: () => _onWordRegistered(),
               icon: Icon(Icons.done),
               tooltip: "登録",
             )
@@ -155,5 +155,38 @@ class _EditScreenState extends State<EditScreen> {
         msg: "登録完了しました",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM);
+  }
+
+  _onWordRegistered() {
+    if (widget.status == EditStatus.ADD) {
+      _insertWord();
+    } else {
+      _updateWord();
+    }
+  }
+
+  void _updateWord() async {
+    if (questionController.text == "" || answerController.text == "") {
+      Fluttertoast.showToast(
+          msg: "問題と答えの両方を入力しないと登録できません",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM);
+      return;
+    }
+    var word = Word(
+        strQuestion: questionController.text, strAnswer: answerController.text);
+    try {
+      await database.updateWprd(word);
+      _backToWordListScreen();
+      Fluttertoast.showToast(
+          msg: "修正が完了しました",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM);
+    } on SqliteException catch (e) {
+      Fluttertoast.showToast(
+          msg: "何らかの問題が発生して登録できませんでした",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM);
+    }
   }
 }

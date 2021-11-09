@@ -139,7 +139,9 @@ class _EditScreenState extends State<EditScreen> {
       return;
     }
     var word = Word(
-        strQuestion: questionController.text, strAnswer: answerController.text);
+        strQuestion: questionController.text,
+        strAnswer: answerController.text,
+        isMemorized: false);
     try {
       await database.addWord(word);
     } on SqliteException catch (e) {
@@ -174,7 +176,9 @@ class _EditScreenState extends State<EditScreen> {
       return;
     }
     var word = Word(
-        strQuestion: questionController.text, strAnswer: answerController.text);
+        strQuestion: questionController.text,
+        strAnswer: answerController.text,
+        isMemorized: false);
     try {
       await database.updateWprd(word);
       _backToWordListScreen();

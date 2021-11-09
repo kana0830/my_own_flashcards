@@ -6,51 +6,78 @@ import 'package:my_own_flashcards/main.dart';
 import 'package:my_own_flashcards/screens/word_list_screen.dart';
 import 'package:sqlite3/src/api/exception.dart';
 
+enum EditStatus { ADD, EDIT }
+
 class EditScreen extends StatefulWidget {
+  final EditStatus status;
+  final Word? word;
+
+  EditScreen({required this.status, this.word});
+
   @override
   _EditScreenState createState() => _EditScreenState();
 }
 
 class _EditScreenState extends State<EditScreen> {
   TextEditingController questionController = TextEditingController();
-
   TextEditingController answerController = TextEditingController();
+
+  String _titleText = "";
+
+  bool _isQuestionEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.status == EditStatus.ADD) {
+      _titleText = "新しい単語の追加";
+      _isQuestionEnabled = true;
+      questionController.text = "";
+      answerController.text = "";
+    } else {
+      _titleText = "登録した単語の修正";
+      _isQuestionEnabled = false;
+      questionController.text = widget.word!.strQuestion;
+      answerController.text = widget.word!.strAnswer;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => _backToWordListScreen(),
       child: Scaffold(
-          appBar: AppBar(
-            title: Text("新しい単語の登録"),
-            centerTitle: true,
-            actions: [
-              IconButton(
-                onPressed: () => _insertWord(),
-                icon: Icon(Icons.done),
-                tooltip: "登録",
-              )
+        appBar: AppBar(
+          title: Text(_titleText),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () => _insertWord(),
+              icon: Icon(Icons.done),
+              tooltip: "登録",
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 30.0),
+              Center(
+                child: Text(
+                  "問題と答えを入力して「登録」ボタンを押してください",
+                  style: TextStyle(fontSize: 12.0),
+                ),
+              ),
+              SizedBox(height: 30.0),
+              //問題入力部分
+              _questionInputPart(),
+              SizedBox(height: 30.0),
+              //答え入力部分
+              _answerInputPart(),
             ],
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 30.0),
-                Center(
-                  child: Text(
-                    "問題と答えを入力して「登録」ボタンを押してください",
-                    style: TextStyle(fontSize: 12.0),
-                  ),
-                ),
-                SizedBox(height: 30.0),
-                //問題入力部分
-                _questionInputPart(),
-                SizedBox(height: 30.0),
-                //答え入力部分
-                _answerInputPart(),
-              ],
-            ),
-          )),
+        ),
+      ),
     );
   }
 
@@ -65,6 +92,7 @@ class _EditScreenState extends State<EditScreen> {
           ),
           SizedBox(height: 10.0),
           TextField(
+            enabled: _isQuestionEnabled,
             controller: questionController,
             keyboardType: TextInputType.text,
             textAlign: TextAlign.center,

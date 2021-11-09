@@ -40,7 +40,13 @@ class _WordListScreenState extends State<WordListScreen> {
 
   _addNewWord() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => EditScreen()));
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditScreen(
+          status: EditStatus.ADD,
+        ),
+      ),
+    );
   }
 
   void _getAllWords() async {
@@ -65,6 +71,7 @@ class _WordListScreenState extends State<WordListScreen> {
           "${_wordList[position].strAnswer}",
           style: TextStyle(fontFamily: "Mont"),
         ),
+        onTap: () => _editWord(_wordList[position]),
         onLongPress: () => _deleteWord(_wordList[position]),
       ),
     );
@@ -77,5 +84,17 @@ class _WordListScreenState extends State<WordListScreen> {
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM);
     _getAllWords();
+  }
+
+  _editWord(Word selectedWord) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditScreen(
+          status: EditStatus.EDIT,
+          word: selectedWord,
+        ),
+      ),
+    );
   }
 }

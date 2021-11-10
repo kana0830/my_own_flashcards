@@ -28,6 +28,9 @@ class _TestScreenState extends State<TestScreen> {
 
   late TestStatus _testStatus;
 
+  int _index = 0; //今何問目
+  late Word _currentWord;
+
   @override
   void initState() {
     super.initState();
@@ -43,6 +46,7 @@ class _TestScreenState extends State<TestScreen> {
     //テスト出題をランダムにする
     _testDataList.shuffle();
     _testStatus = TestStatus.BEFORE_START;
+    _index = 0;
 
     setState(() {
       _isQuestionCardVisible = false;
@@ -175,9 +179,11 @@ class _TestScreenState extends State<TestScreen> {
     switch (_testStatus) {
       case TestStatus.BEFORE_START:
         _testStatus = TestStatus.SHOW_QUESTION;
+        _showQuestion();
         break;
       case TestStatus.SHOW_QUESTION:
         _testStatus = TestStatus.SHOE_ANSWER;
+        _showAnswer();
         break;
       case TestStatus.SHOE_ANSWER:
         if (_numberOfQuestion <= 0) {
@@ -189,5 +195,33 @@ class _TestScreenState extends State<TestScreen> {
       case TestStatus.FINISHED:
         break;
     }
+  }
+
+  void _showQuestion() {
+    _currentWord = _testDataList[_index];
+    setState(
+      () {
+        _isQuestionCardVisible = true;
+        _isAnswerCardVisible = false;
+        _isCheckBoxVisible = false;
+        _isFabVisible = true;
+        _txtQuestion = _currentWord.strQuestion;
+      },
+    );
+    _numberOfQuestion -= 1;
+    _index += 1;
+  }
+
+  void _showAnswer() {
+    setState(
+      () {
+        _isQuestionCardVisible = true;
+        _isAnswerCardVisible = true;
+        _isCheckBoxVisible = true;
+        _isFabVisible = true;
+        _txtAnswer = _currentWord.strAnswer;
+        _isMemorized = _currentWord.isMemorized;
+      },
+    );
   }
 }

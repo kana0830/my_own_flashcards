@@ -14,6 +14,8 @@ class TestScreen extends StatefulWidget {
 class _TestScreenState extends State<TestScreen> {
   int _numberOfQuestion = 0;
 
+  String _txtQuestion = "テスト";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,9 +31,12 @@ class _TestScreenState extends State<TestScreen> {
       body: Column(
         children: [
           SizedBox(
-            height: 10.0,
+            height: 30.0,
           ),
           _numberOfQuestionsPart(),
+          SizedBox(
+            height: 50.0,
+          ),
           _questionOfPart(),
           _answerCardPart(),
           _isMemorizedCheckPart(),
@@ -47,7 +52,7 @@ class _TestScreenState extends State<TestScreen> {
       children: [
         Text(
           "のこりの問題数",
-          style: TextStyle(fontSize: 14.0),
+          style: TextStyle(fontSize: 18.0),
         ),
         SizedBox(
           width: 30.0,
@@ -62,7 +67,16 @@ class _TestScreenState extends State<TestScreen> {
 
   //TODO 問題カード表示部分
   Widget _questionOfPart() {
-    return Container();
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Image.asset("assets/images/image_flash_question.png"),
+        Text(
+          _txtQuestion,
+          style: TextStyle(color: Colors.grey[800], fontSize: 20.0),
+        ),
+      ],
+    );
   }
 
   //TODO こたえカード表示部分

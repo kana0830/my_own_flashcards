@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_own_flashcards/db/database.dart';
+import 'package:my_own_flashcards/main.dart';
 
 enum TestStatus { BEFORE_START, SHOW_QUESTION, SHOE_ANSWER, FINISHED }
 
@@ -16,6 +18,24 @@ class _TestScreenState extends State<TestScreen> {
   String _txtQuestion = "テスト"; //TODO
   String _txtAnswer = "こたえ"; //TODO
   bool _isMemorized = false;
+  List<Word> _testDataList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getTestData();
+  }
+
+  void _getTestData() async {
+    if (widget.isIncludedMemorizedWords) {
+      _testDataList = await database.allWords;
+    } else {
+      _testDataList = await database.allWordsExcludedMemorized;
+    }
+    setState(() {
+      _numberOfQuestion = _testDataList.length;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,16 +125,19 @@ class _TestScreenState extends State<TestScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0),
       child: CheckboxListTile(
-          title: Text(
-            "暗記済みにする場合はチェックを入れてください",
-            style: TextStyle(fontSize: 12.0),
-          ),
-          value: _isMemorized,
-          onChanged: (value) {
-            setState(() {
+        title: Text(
+          "暗記済みにする場合はチェックを入れてください",
+          style: TextStyle(fontSize: 12.0),
+        ),
+        value: _isMemorized,
+        onChanged: (value) {
+          setState(
+            () {
               _isMemorized = value!;
-            });
-          }),
+            },
+          );
+        },
+      ),
     );
   }
 }

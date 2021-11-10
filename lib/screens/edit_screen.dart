@@ -180,7 +180,7 @@ class _EditScreenState extends State<EditScreen> {
         strAnswer: answerController.text,
         isMemorized: false);
     try {
-      await database.updateWprd(word);
+      await database.updateWord(word);
       _backToWordListScreen();
       Fluttertoast.showToast(
           msg: "修正が完了しました",

@@ -12,6 +12,8 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
+  int _numberOfQuestion = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +28,9 @@ class _TestScreenState extends State<TestScreen> {
       ),
       body: Column(
         children: [
+          SizedBox(
+            height: 10.0,
+          ),
           _numberOfQuestionsPart(),
           _questionOfPart(),
           _answerCardPart(),
@@ -35,9 +40,24 @@ class _TestScreenState extends State<TestScreen> {
     );
   }
 
-  //TODO 残り問題数表示部分
+  //残り問題数表示部分
   Widget _numberOfQuestionsPart() {
-    return Container();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "のこりの問題数",
+          style: TextStyle(fontSize: 14.0),
+        ),
+        SizedBox(
+          width: 30.0,
+        ),
+        Text(
+          _numberOfQuestion.toString(),
+          style: TextStyle(fontSize: 14.0),
+        ),
+      ],
+    );
   }
 
   //TODO 問題カード表示部分

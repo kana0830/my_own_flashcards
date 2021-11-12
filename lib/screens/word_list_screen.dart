@@ -25,6 +25,13 @@ class _WordListScreenState extends State<WordListScreen> {
       appBar: AppBar(
         title: Text("単語一覧"),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () => _sortWords(),
+            icon: Icon(Icons.sort),
+            tooltip: "暗記済みの単語を下になるようにソート",
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -98,5 +105,10 @@ class _WordListScreenState extends State<WordListScreen> {
         ),
       ),
     );
+  }
+
+  _sortWords() async {
+    _wordList = await database.allWordsSorted;
+    setState(() {});
   }
 }

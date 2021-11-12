@@ -71,6 +71,8 @@ class _WordListScreenState extends State<WordListScreen> {
           "${_wordList[position].strAnswer}",
           style: TextStyle(fontFamily: "Mont"),
         ),
+        trailing:
+            _wordList[position].isMemorized ? Icon(Icons.check_circle) : null,
         onTap: () => _editWord(_wordList[position]),
         onLongPress: () => _deleteWord(_wordList[position]),
       ),

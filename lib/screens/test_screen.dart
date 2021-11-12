@@ -26,7 +26,7 @@ class _TestScreenState extends State<TestScreen> {
 
   List<Word> _testDataList = [];
 
-  late TestStatus _testStatus;
+  TestStatus? _testStatus;
 
   int _index = 0; //今何問目
   late Word _currentWord;
@@ -71,24 +71,29 @@ class _TestScreenState extends State<TestScreen> {
               tooltip: "次にすすむ",
             )
           : null,
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(
-            height: 50.0,
+          Column(
+            children: [
+              SizedBox(
+                height: 50.0,
+              ),
+              _numberOfQuestionsPart(),
+              SizedBox(
+                height: 80.0,
+              ),
+              _questionOfPart(),
+              SizedBox(
+                height: 10.0,
+              ),
+              _answerCardPart(),
+              SizedBox(
+                height: 20.0,
+              ),
+              _isMemorizedCheckPart(),
+            ],
           ),
-          _numberOfQuestionsPart(),
-          SizedBox(
-            height: 80.0,
-          ),
-          _questionOfPart(),
-          SizedBox(
-            height: 10.0,
-          ),
-          _answerCardPart(),
-          SizedBox(
-            height: 20.0,
-          ),
-          _isMemorizedCheckPart(),
+          _endMessage(),
         ],
       ),
     );
@@ -175,7 +180,21 @@ class _TestScreenState extends State<TestScreen> {
     }
   }
 
-  _goNextStatus() {
+  //テスト終了メッセージ
+  Widget _endMessage() {
+    if (_testStatus == TestStatus.FINISHED) {
+      return Center(
+        child: Text(
+          "テスト終了",
+          style: TextStyle(fontSize: 50.0),
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  _goNextStatus() async {
     switch (_testStatus) {
       case TestStatus.BEFORE_START:
         _testStatus = TestStatus.SHOW_QUESTION;
@@ -186,10 +205,15 @@ class _TestScreenState extends State<TestScreen> {
         _showAnswer();
         break;
       case TestStatus.SHOE_ANSWER:
+        await _updateMemorizedFlag();
         if (_numberOfQuestion <= 0) {
-          _testStatus = TestStatus.FINISHED;
+          setState(() {
+            _isFabVisible = false;
+            _testStatus = TestStatus.FINISHED;
+          });
         } else {
           _testStatus = TestStatus.SHOW_QUESTION;
+          _showQuestion();
         }
         break;
       case TestStatus.FINISHED:
@@ -223,5 +247,13 @@ class _TestScreenState extends State<TestScreen> {
         _isMemorized = _currentWord.isMemorized;
       },
     );
+  }
+
+  Future<void> _updateMemorizedFlag() async {
+    var updateWord = Word(
+        strQuestion: _currentWord.strQuestion,
+        strAnswer: _currentWord.strAnswer,
+        isMemorized: _isMemorized);
+    await database.updateWord(updateWord);
   }
 }

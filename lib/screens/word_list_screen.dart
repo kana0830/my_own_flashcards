@@ -87,12 +87,35 @@ class _WordListScreenState extends State<WordListScreen> {
   }
 
   _deleteWord(Word selectedWord) async {
-    await database.deleteWord(selectedWord);
-    Fluttertoast.showToast(
-        msg: "削除が完了しました",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM);
-    _getAllWords();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        title: Text(selectedWord.strQuestion),
+        content: Text("削除してもいいですか？"),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await database.deleteWord(selectedWord);
+              Fluttertoast.showToast(msg: "削除が完了しました");
+              _getAllWords();
+              Navigator.pop(context);
+            },
+            child: Text("はい"),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("いいえ"),
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   _editWord(Word selectedWord) {
